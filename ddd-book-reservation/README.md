@@ -6,8 +6,7 @@ DDD 를 사용하여 도서예약 시스템 구현
 ## Package 구조
 ```
 |-- application
-|   |-- BookApplicationService.java
-|   |-- UserService.java
+|   |-- BookService.java
 |
 |-- domain
 |   |-- model

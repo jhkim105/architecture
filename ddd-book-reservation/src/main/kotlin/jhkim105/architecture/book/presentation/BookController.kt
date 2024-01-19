@@ -17,7 +17,7 @@ class BookController(
 ) {
 
   @GetMapping("/{bookId}")
-  fun getBookDetails(@PathVariable bookId: String): Book? {
+  fun getBook(@PathVariable bookId: String): Book? {
     return bookService.get(bookId)
   }
 
