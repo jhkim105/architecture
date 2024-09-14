@@ -27,7 +27,7 @@ class BookController(
     val userId = reserveRequest.userId
 
     val result = bookService.reserve(ReserveParam(userId, bookId))
-    return ReservedResponse(bookId, userId, result.reservedBooks!!)
+    return ReservedResponse(bookId, userId, result.reservedBooks)
   }
 }
 
