@@ -1,0 +1,25 @@
+### Create
+POST http://localhost:8080/accounts
+Content-Type: application/x-www-form-urlencoded
+
+initialBalance = 100
+
+> {%
+    client.global.set("accountId", response.body.id);
+%}
+
+### Get
+GET http://localhost:8080/accounts/{{accountId}}
+Accept: application/json
+
+### Deposit
+POST http://localhost:8080/accounts/{{accountId}}/deposit
+Content-Type: application/x-www-form-urlencoded
+
+amount = 100
+
+### Deposit - Error
+POST http://localhost:8080/accounts/{{accountId}}/deposit
+Content-Type: application/x-www-form-urlencoded
+
+amount = -100

@@ -1,10 +1,12 @@
 package jhkim105.tutorials.application.domain.service
 
+import jhkim105.tutorials.adapter.out.persistence.AccountJpaEntity
 import jhkim105.tutorials.application.domain.model.Account
 import jhkim105.tutorials.application.port.`in`.AccountService
 import jhkim105.tutorials.application.port.out.AccountRepository
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.util.*
 
 
 @Service
@@ -13,6 +15,12 @@ class AccountServiceImpl(
 ) : AccountService {
     override fun get(accountId: String): Account {
         return accountRepository.findById(accountId)
+    }
+
+    override fun create(initialBalance: BigDecimal): Account {
+        val accountId = UUID.randomUUID().toString()
+        val newAccount = Account(accountId, initialBalance)
+        return accountRepository.save(newAccount)
     }
 
     override fun deposit(accountId: String, amount: BigDecimal): Account {
