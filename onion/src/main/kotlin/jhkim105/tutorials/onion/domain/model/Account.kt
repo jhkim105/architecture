@@ -1,4 +1,4 @@
-package jhkim105.tutorials.application.domain.model
+package jhkim105.tutorials.onion.domain.model
 
 import jakarta.persistence.Id
 import java.math.BigDecimal

@@ -1,6 +1,6 @@
 spring:
     application:
-        name: hexagonal
+        name: onion
     profiles:
         active: mariadb
     jpa:

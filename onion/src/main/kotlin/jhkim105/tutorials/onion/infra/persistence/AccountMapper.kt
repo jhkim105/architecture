@@ -1,6 +1,7 @@
 package jhkim105.tutorials.onion.infra.persistence
 
-import jhkim105.tutorials.application.domain.model.Account
+import jhkim105.tutorials.onion.domain.model.Account
+
 
 object AccountMapper {
     fun toDomain(jpaEntity: AccountJpaEntity): Account {

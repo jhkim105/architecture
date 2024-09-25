@@ -1,6 +1,6 @@
 package jhkim105.tutorials.onion.infra.persistence
 
-import jhkim105.tutorials.application.domain.model.Account
+import jhkim105.tutorials.onion.domain.model.Account
 import jhkim105.tutorials.onion.domain.repository.AccountRepository
 import org.springframework.stereotype.Repository
 

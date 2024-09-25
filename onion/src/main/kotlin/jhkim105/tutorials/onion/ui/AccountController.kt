@@ -1,7 +1,7 @@
 package jhkim105.tutorials.onion.ui
 
-import jhkim105.tutorials.application.domain.model.Account
 import jhkim105.tutorials.onion.application.AccountService
+import jhkim105.tutorials.onion.domain.model.Account
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.math.BigDecimal

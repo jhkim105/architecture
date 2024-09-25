@@ -1,6 +1,6 @@
 package jhkim105.tutorials.onion.application
 
-import jhkim105.tutorials.application.domain.model.Account
+import jhkim105.tutorials.onion.domain.model.Account
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
