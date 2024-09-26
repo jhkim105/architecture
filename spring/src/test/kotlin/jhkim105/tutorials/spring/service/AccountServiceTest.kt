@@ -3,13 +3,13 @@ package jhkim105.tutorials.spring.service
 import jhkim105.tutorials.spring.model.Account
 import jhkim105.tutorials.spring.repository.AccountRepository
 import jhkim105.tutorials.spring.service.impl.AccountServiceImpl
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.springframework.data.repository.findByIdOrNull
 import java.math.BigDecimal
 import java.util.*
 
