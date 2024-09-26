@@ -2,9 +2,11 @@ package jhkim105.tutorials.hexagonal.adapter.out.persistence
 
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.math.BigDecimal
 
 @Entity
+@Table(name = "account")
 class AccountJpaEntity(
     @Id
     val id: String,

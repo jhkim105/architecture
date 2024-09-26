@@ -17,7 +17,7 @@ class AccountRepositoryTest {
 
 
     @Test
-    @Sql("AccountRepositoryTest.sql")
+    @Sql("/sql/AccountRepositoryTest.sql")
     fun findById() {
         assertThat(accountRepository.findByIdOrNull("tid01")?.balance).isEqualTo(BigDecimal("100.00"))
     }
