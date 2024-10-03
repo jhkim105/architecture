@@ -13,8 +13,8 @@ import java.util.*
 class AccountServiceImpl(
     private val accountRepository: AccountRepository
 ) : AccountService {
-    override fun get(accountId: String): Account {
-        return accountRepository.findByIdOrNull(accountId) ?: throw IllegalArgumentException("data not found")
+    override fun get(id: String): Account {
+        return accountRepository.findByIdOrNull(id) ?: throw IllegalArgumentException("data not found")
     }
 
     override fun create(initialBalance: BigDecimal): Account {
