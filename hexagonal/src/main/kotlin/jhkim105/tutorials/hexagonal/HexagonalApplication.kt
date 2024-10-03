@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class DddHexagonalApplication
+class HexagonalApplication
 
 fun main(args: Array<String>) {
-	runApplication<DddHexagonalApplication>(*args)
+	runApplication<HexagonalApplication>(*args)
 }
