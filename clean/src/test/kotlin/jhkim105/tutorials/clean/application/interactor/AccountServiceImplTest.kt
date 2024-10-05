@@ -1,18 +1,17 @@
-package jhkim105.tutorials.hexagonal.application.domain.service
+package jhkim105.tutorials.clean.application.interactor
 
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import jhkim105.tutorials.hexagonal.application.domain.model.Account
-import jhkim105.tutorials.hexagonal.application.port.`in`.AccountService
-import jhkim105.tutorials.hexagonal.application.port.out.AccountRepository
+import jhkim105.tutorials.clean.application.boundary.`in`.AccountService
+import jhkim105.tutorials.clean.application.entity.Account
+import jhkim105.tutorials.clean.application.gateway.AccountRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
-class AccountServiceTest {
-
+class AccountServiceImplTest {
     private lateinit var accountRepository: AccountRepository
     private lateinit var accountService: AccountService
 
@@ -75,4 +74,5 @@ class AccountServiceTest {
 
         assertEquals("Insufficient funds", exception.message)
     }
+
 }

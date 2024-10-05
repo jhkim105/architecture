@@ -1,0 +1,6 @@
+spring:
+    datasource:
+        url: jdbc:mariadb://localhost/demo_bank?createDatabaseIfNotExist=true
+        username: root
+        password: 111111
+

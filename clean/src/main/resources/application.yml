@@ -1,0 +1,9 @@
+spring:
+    application:
+        name: clean
+    profiles:
+        active: mariadb
+    jpa:
+        hibernate:
+            ddl-auto: create
+        open-in-view: false

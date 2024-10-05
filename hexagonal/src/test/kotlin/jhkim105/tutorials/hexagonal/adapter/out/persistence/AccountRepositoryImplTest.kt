@@ -1,4 +1,4 @@
-package jhkim105.tutorials.hexagonal.adapter.`in`.out
+package jhkim105.tutorials.hexagonal.adapter.out.persistence
 
 import jhkim105.tutorials.hexagonal.adapter.out.persistence.AccountMapper
 import jhkim105.tutorials.hexagonal.adapter.out.persistence.AccountRepositoryImpl
