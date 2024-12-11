@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository
 @Repository
 class AccountRepositoryImpl(private val jpaRepository: AccountJpaRepository) : AccountRepository {
     override fun findById(accountId: String): Account {
-        val accountJpaEntity = jpaRepository.findById(accountId)
-        return accountJpaEntity.map { AccountMapper.toDomain(it) }.orElse(null)
+        val accountJpaEntityOptional = jpaRepository.findById(accountId)
+        return accountJpaEntityOptional.map { AccountMapper.toDomain(it) }.orElse(null)
     }
 
     override fun save(account: Account): Account {

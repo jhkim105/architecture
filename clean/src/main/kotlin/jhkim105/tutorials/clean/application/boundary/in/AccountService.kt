@@ -6,7 +6,7 @@ import java.math.BigDecimal
 
 @Component
 interface AccountService {
-    fun get(id: String): Account
+    fun get(accountId: String): Account
     fun create(initialBalance: BigDecimal): Account
     fun deposit(accountId: String, amount: BigDecimal): Account
     fun withdraw(accountId: String, amount: BigDecimal): Account

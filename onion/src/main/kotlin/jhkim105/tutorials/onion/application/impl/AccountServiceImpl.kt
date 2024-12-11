@@ -13,7 +13,7 @@ class AccountServiceImpl(
     private val accountRepository: AccountRepository
 ) : AccountService {
     override fun get(accountId: String): Account {
-        return accountRepository.findById(accountId)
+        return accountRepository.findById(accountId = accountId)
     }
 
     override fun create(initialBalance: BigDecimal): Account {

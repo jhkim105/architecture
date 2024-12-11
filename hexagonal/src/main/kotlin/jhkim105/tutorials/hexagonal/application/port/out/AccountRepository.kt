@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface AccountRepository {
-    fun findById(accountId: String): Account
+    fun findById(accountId: String): Account?
     fun save(account: Account): Account
 }
