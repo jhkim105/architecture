@@ -1,82 +1,88 @@
 package jhkim105.tutorials.spring.service
 
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import jhkim105.tutorials.spring.model.Account
 import jhkim105.tutorials.spring.repository.AccountRepository
 import jhkim105.tutorials.spring.service.impl.AccountServiceImpl
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.springframework.data.repository.findByIdOrNull
 import java.math.BigDecimal
-import java.util.*
 
-class AccountServiceTest {
+class AccountServiceTest : BehaviorSpec({
+    val accountRepository = mockk<AccountRepository>()
+    val accountService = AccountServiceImpl(accountRepository)
 
-    private lateinit var accountRepository: AccountRepository
-    private lateinit var accountService: AccountService
+    Given("전통적인 Spring 계층형 서비스 테스트 환경이 주어졌을 때") {
+        When("신규 계좌를 생성하면") {
+            every { accountRepository.save(any()) } answers { firstArg() }
 
-    @BeforeEach
-    fun setUp() {
-        accountRepository = mockk<AccountRepository>()
-        accountService = AccountServiceImpl(accountRepository)
-    }
+            val created = accountService.create(BigDecimal("500"))
 
-    @Test
-    fun `should deposit amount to account`() {
-        val account = Account("1", BigDecimal(1000))
-        every { accountRepository.findByIdOrNull("1") } answers { account }
-        every { accountRepository.save(account) } answers { account }
-
-        accountService.deposit("1", BigDecimal(200))
-
-        assertEquals(BigDecimal(1200), account.balance)
-        verify { accountRepository.save(account) }
-    }
-
-    @Test
-    fun `should withdraw amount from account`() {
-        val account = Account("1", BigDecimal(1000))
-        every { accountRepository.findByIdOrNull("1") } answers { account }
-        every { accountRepository.save(account) } answers { account }
-
-        accountService.withdraw("1", BigDecimal(300))
-
-        assertEquals(BigDecimal(700), account.balance)
-        verify { accountRepository.save(account) }
-    }
-
-    @Test
-    fun `should transfer amount between accounts`() {
-        val fromAccount = Account("1", BigDecimal(1000))
-        val toAccount = Account("2", BigDecimal(500))
-        every { accountRepository.findByIdOrNull("1") } answers { fromAccount }
-        every { accountRepository.findByIdOrNull("2") } answers { toAccount }
-        every { accountRepository.save(fromAccount) } answers { fromAccount }
-        every { accountRepository.save(toAccount) } answers { toAccount }
-
-        accountService.transfer("1", "2", BigDecimal(400))
-
-        assertEquals(BigDecimal(600), fromAccount.balance)
-        assertEquals(BigDecimal(900), toAccount.balance)
-
-        verify { accountRepository.save(fromAccount) }
-        verify { accountRepository.save(toAccount) }
-    }
-
-    @Test
-    fun `should throw exception when withdrawing more than balance`() {
-        val account = Account("1", BigDecimal(1000))
-        every { accountRepository.findByIdOrNull("1") } answers { account }
-        every { accountRepository.save(account) } answers { account }
-
-        val exception = assertThrows(IllegalArgumentException::class.java) {
-            accountService.withdraw("1", BigDecimal(1500))
+            Then("JPA Repository의 save가 호출되고 계좌가 생성된다") {
+                created.balance shouldBe BigDecimal("500")
+                verify { accountRepository.save(any()) }
+            }
         }
 
-        assertEquals("Insufficient funds", exception.message)
+        When("입금을 요청하면") {
+            val account = Account("1", BigDecimal("1000"))
+            every { accountRepository.findByIdOrNull("1") } returns account
+            every { accountRepository.save(account) } returns account
+
+            val result = accountService.deposit("1", BigDecimal("200"))
+
+            Then("엔티티의 잔액이 변경되고 JPA save가 호출된다") {
+                result.balance shouldBe BigDecimal("1200")
+                verify { accountRepository.save(account) }
+            }
+        }
+
+        When("출금을 요청하면") {
+            val account = Account("1", BigDecimal("1000"))
+            every { accountRepository.findByIdOrNull("1") } returns account
+            every { accountRepository.save(account) } returns account
+
+            val result = accountService.withdraw("1", BigDecimal("300"))
+
+            Then("잔액이 차감된다") {
+                result.balance shouldBe BigDecimal("700")
+                verify { accountRepository.save(account) }
+            }
+        }
+
+        When("이체를 요청하면") {
+            val fromAccount = Account("1", BigDecimal("1000"))
+            val toAccount = Account("2", BigDecimal("500"))
+            every { accountRepository.findByIdOrNull("1") } returns fromAccount
+            every { accountRepository.findByIdOrNull("2") } returns toAccount
+            every { accountRepository.save(fromAccount) } returns fromAccount
+            every { accountRepository.save(toAccount) } returns toAccount
+
+            val result = accountService.transfer("1", "2", BigDecimal("400"))
+
+            Then("두 JPA 엔티티가 모두 갱신되어 저장된다") {
+                fromAccount.balance shouldBe BigDecimal("600")
+                toAccount.balance shouldBe BigDecimal("900")
+                result.balance shouldBe BigDecimal("900")
+                verify { accountRepository.save(fromAccount) }
+                verify { accountRepository.save(toAccount) }
+            }
+        }
+
+        When("잔액을 초과하여 출금하려고 하면") {
+            val account = Account("1", BigDecimal("1000"))
+            every { accountRepository.findByIdOrNull("1") } returns account
+
+            Then("Insufficient funds 예외가 발생한다") {
+                val exception = shouldThrow<IllegalArgumentException> {
+                    accountService.withdraw("1", BigDecimal("1500"))
+                }
+                exception.message shouldBe "Insufficient funds"
+            }
+        }
     }
-}
+})

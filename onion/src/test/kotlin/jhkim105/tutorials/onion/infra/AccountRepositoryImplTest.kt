@@ -23,7 +23,7 @@ class AccountRepositoryImplTest {
     @Test
     @Sql("/sql/AccountRepositoryTest.sql")
     fun findById() {
-        assertThat(accountRepository.findById("tid01").balance).isEqualTo(BigDecimal("100.00"))
+        assertThat(accountRepository.findById("tid01")?.balance).isEqualTo(BigDecimal("100.00"))
     }
 
 }
