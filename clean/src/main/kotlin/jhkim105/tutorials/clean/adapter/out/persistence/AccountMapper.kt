@@ -1,7 +1,6 @@
 package jhkim105.tutorials.clean.adapter.out.persistence
 
-import jhkim105.tutorials.clean.application.entity.Account
-
+import jhkim105.tutorials.clean.domain.entity.Account
 
 object AccountMapper {
     fun toDomain(jpaEntity: AccountJpaEntity): Account {

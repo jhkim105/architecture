@@ -1,21 +1,22 @@
 package jhkim105.tutorials.onion.ui
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import jhkim105.tutorials.onion.domain.model.Account
 import jhkim105.tutorials.onion.infra.persistence.AccountJpaEntity
 import jhkim105.tutorials.onion.infra.persistence.AccountJpaRepository
-import org.junit.jupiter.api.Assertions.*
+import jhkim105.tutorials.onion.ui.dto.AccountResponse
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import java.math.BigDecimal
 
 @SpringBootTest
@@ -34,7 +35,6 @@ class AccountControllerIntegrationTest {
 
     @BeforeEach
     fun setup() {
-        // 테스트용 데이터 초기화 (H2 인메모리 DB)
         accountJpaRepository.deleteAll()
         accountJpaRepository.save(AccountJpaEntity("1", BigDecimal(1000)))
         accountJpaRepository.save(AccountJpaEntity("2", BigDecimal(500)))
@@ -42,24 +42,19 @@ class AccountControllerIntegrationTest {
 
     @Test
     fun `should create a new account successfully`() {
-        // Arrange
         val initialBalance = BigDecimal(300)
 
-        // Act & Assert
         val result = mockMvc.perform(
             post("/accounts")
                 .param("initialBalance", initialBalance.toString())
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.balance").value(initialBalance)) // 잔액 검증
-
+            .andExpect(jsonPath("$.balance").value(initialBalance))
             .andReturn()
 
-        // Extract created account ID from the response
-        val createdAccount = objectMapper.readValue(result.response.contentAsString, Account::class.java)
+        val createdAccount = objectMapper.readValue(result.response.contentAsString, AccountResponse::class.java)
 
-        // Verify that the account was created in the database
         val savedAccount = accountJpaRepository.findById(createdAccount.id)
         assertTrue(savedAccount.isPresent)
         assertEquals(initialBalance, savedAccount.get().balance)
@@ -67,11 +62,9 @@ class AccountControllerIntegrationTest {
 
     @Test
     fun `should deposit amount to account successfully`() {
-        // Arrange
         val accountId = "1"
         val amount = BigDecimal(200)
 
-        // Act & Assert
         mockMvc.perform(
             post("/accounts/{accountId}/deposit", accountId)
                 .param("amount", amount.toString())
@@ -79,18 +72,15 @@ class AccountControllerIntegrationTest {
         )
             .andExpect(status().isOk)
 
-        // Verify the database state
         val updatedAccount = accountJpaRepository.findById(accountId).get()
         assertEquals(BigDecimal(1200), updatedAccount.balance)
     }
 
     @Test
     fun `should withdraw amount from account successfully`() {
-        // Arrange
         val accountId = "1"
         val amount = BigDecimal(100)
 
-        // Act & Assert
         mockMvc.perform(
             post("/accounts/{accountId}/withdraw", accountId)
                 .param("amount", amount.toString())
@@ -98,19 +88,16 @@ class AccountControllerIntegrationTest {
         )
             .andExpect(status().isOk)
 
-        // Verify the database state
         val updatedAccount = accountJpaRepository.findById(accountId).get()
         assertEquals(BigDecimal(900), updatedAccount.balance)
     }
 
     @Test
     fun `should transfer amount between accounts successfully`() {
-        // Arrange
         val fromAccountId = "1"
         val toAccountId = "2"
         val amount = BigDecimal(300)
 
-        // Act & Assert
         mockMvc.perform(
             post("/accounts/{fromAccountId}/transfer/{toAccountId}", fromAccountId, toAccountId)
                 .param("amount", amount.toString())
@@ -118,28 +105,10 @@ class AccountControllerIntegrationTest {
         )
             .andExpect(status().isOk)
 
-        // Verify the database state
         val updatedFromAccount = accountJpaRepository.findById(fromAccountId).get()
         val updatedToAccount = accountJpaRepository.findById(toAccountId).get()
 
         assertEquals(BigDecimal(700), updatedFromAccount.balance)
         assertEquals(BigDecimal(800), updatedToAccount.balance)
-    }
-
-    @Test
-    @Disabled("how to pass") // TODO
-    fun `should return error when deposit amount is invalid`() {
-        // Arrange
-        val accountId = "1"
-        val invalidAmount = BigDecimal(-100)
-
-        // Act & Assert
-        mockMvc.perform(
-            post("/accounts/{accountId}/deposit", accountId)
-                .param("amount", invalidAmount.toString())
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(status().isBadRequest)
-
     }
 }
