@@ -57,7 +57,7 @@ class AccountControllerIntegrationTest {
             .andReturn()
 
         // Extract created account ID from the response
-        val createdAccount = objectMapper.readValue(result.response.contentAsString, Account::class.java)
+        val createdAccount = objectMapper.readValue(result.response.contentAsString, jhkim105.tutorials.hexagonal.adapter.`in`.rest.dto.AccountResponse::class.java)
 
         // Verify that the account was created in the database
         val savedAccount = accountJpaRepository.findById(createdAccount.id)
