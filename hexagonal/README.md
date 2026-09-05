@@ -183,7 +183,14 @@ src/main/kotlin/jhkim105/tutorials/hexagonal/
 
 ---
 
-## 6. References
+## 6. 심화 설계 가이드 (Deep Dive Guides)
+
+* 📘 [**톰 홈버그의 실전 헥사고날 아키텍처 가이드**](docs/tom-hombergs-architecture.md): 《만들면서 배우는 클린 아키텍처》 스타일의 유스케이스 분리, Self-Validating Command, 풍부한 Value Object 설계 패턴.
+* 📗 [**Outbound Port vs Domain Repository 비교**](docs/outbound-port-vs-domain-repository.md): `application.port.out`과 `domain.repository`의 계층 배치 철학 및 장단점 비교.
+
+---
+
+## 7. References
 - [Alistair Cockburn - Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/)
 - [Hexagonal Architecture Budapest Presentation (PDF)](https://alistaircockburn.com/Hexagonal%20Budapest%2023-05-18.pdf)
 - [Reflectoring - Hexagonal Architecture with Spring Boot](https://reflectoring.io/spring-hexagonal/)
