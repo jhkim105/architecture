@@ -56,7 +56,7 @@
 | **유스케이스 구현체** | `service.impl.AccountServiceImpl` | `application.service.AccountService` | `usecase.interactor.AccountInteractor` | `application.service.AccountService` |
 | **Outbound 인터페이스**| `repository.AccountRepository` | `port.out.LoadAccountPort`, `SaveAccountPort` | `usecase.gateway.LoadAccountGateway`, `SaveAccountGateway` | `domain.repository.AccountRepository` |
 | **데이터 전달 모델** | Web DTO | `*Command`, `*Query`, Web DTO | `*RequestModel`, `*ResponseModel`, Web DTO | `*Command`, `*Query`, Web DTO |
-| **영속성 어댑터** | *(JPA Repository 직접 사용)* | `adapter.out.persistence.AccountRepositoryImpl` | `adapter.out.persistence.AccountGatewayImpl` | `infra.persistence.AccountRepositoryImpl` |
+| **영속성 어댑터** | *(JPA Repository 직접 사용)* | `adapter.out.persistence.AccountPersistenceAdapter` | `adapter.out.persistence.AccountGatewayImpl` | `infra.persistence.AccountRepositoryImpl` |
 
 ---
 

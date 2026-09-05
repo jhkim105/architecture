@@ -44,7 +44,7 @@
    │  Account (단일 엔티티 캡슐화) │            ▼
    └───────────────────────────────┘ ┌──────────────────────┐
                                      │ [Outbound Adapter]   │
-                                     │  AccountRepositoryImpl
+                                     │  AccountPersistenceAdapter
                                      │  (JPA / DB 연동)     │
                                      └──────────────────────┘
 ```
@@ -147,7 +147,7 @@ src/main/kotlin/jhkim105/tutorials/hexagonal/
 │       ├── AccountJpaEntity.kt
 │       ├── AccountJpaRepository.kt
 │       ├── AccountMapper.kt
-│       └── AccountRepositoryImpl.kt
+│       └── AccountPersistenceAdapter.kt
 └── application/
     ├── domain/                       # Core Domain
     │   ├── model/
@@ -163,21 +163,21 @@ src/main/kotlin/jhkim105/tutorials/hexagonal/
     │   │   └── GetAccountUseCase.kt
     │   └── out/                      # Outbound Ports (Driven Ports)
     │       ├── LoadAccountPort.kt
-    │       ├── SaveAccountPort.kt
-    │       └── AccountRepository.kt
+    │       └── SaveAccountPort.kt
     └── service/
         └── AccountService.kt         # Application Use Case Service
 ```
 
 ---
 
-## 5. 테스트 전략 (Kotest BDD)
+## 5. 테스트 전략 (Kotest BDD & Spring Boot Test)
 
-이 프로젝트는 **Kotest `BehaviorSpec`** 스타일의 BDD(Behavior-Driven Development) 테스트를 사용하여 비즈니스 시나리오를 명확하게 검증합니다:
+이 프로젝트는 **Kotest `BehaviorSpec`** 스타일의 BDD(Behavior-Driven Development) 및 Spring Boot Slice/Integration 테스트를 통해 각 계층의 역할을 철저히 검증합니다:
 
 * **도메인 단위 테스트**: [`AccountTest.kt`](file:///Users/jihwankim/workspace/architecture/hexagonal/src/test/kotlin/jhkim105/tutorials/hexagonal/application/domain/model/AccountTest.kt)
 * **도메인 서비스 단위 테스트**: [`AccountTransferDomainServiceTest.kt`](file:///Users/jihwankim/workspace/architecture/hexagonal/src/test/kotlin/jhkim105/tutorials/hexagonal/application/domain/service/AccountTransferDomainServiceTest.kt)
 * **애플리케이션 서비스 Mock 테스트**: [`AccountServiceTest.kt`](file:///Users/jihwankim/workspace/architecture/hexagonal/src/test/kotlin/jhkim105/tutorials/hexagonal/application/service/AccountServiceTest.kt)
+* **영속성 어댑터 슬라이스 테스트**: [`AccountPersistenceAdapterTest.kt`](file:///Users/jihwankim/workspace/architecture/hexagonal/src/test/kotlin/jhkim105/tutorials/hexagonal/adapter/out/persistence/AccountPersistenceAdapterTest.kt)
 * **Web Controller 슬라이스 테스트**: [`AccountControllerTest.kt`](file:///Users/jihwankim/workspace/architecture/hexagonal/src/test/kotlin/jhkim105/tutorials/hexagonal/adapter/in/rest/AccountControllerTest.kt)
 * **통합 테스트**: [`AccountControllerIntegrationTest.kt`](file:///Users/jihwankim/workspace/architecture/hexagonal/src/test/kotlin/jhkim105/tutorials/hexagonal/adapter/in/rest/AccountControllerIntegrationTest.kt)
 
